@@ -2,7 +2,6 @@ import os
 import shutil
 import os.path
 from pathlib import Path
-from time import monotonic
 
 import_dir = 'Z:/SRDS/DS-440/27'
 export_dir = 'Z:/SRDS/DS-440/28'
@@ -13,15 +12,12 @@ def work():
     f = open(paths[0], "a")
     f.write("27\n")
     f.close()
-    for root, subFolders, files in os.walk(import_dir):
+    for root, sub_folders, files in os.walk(import_dir):
         for file in files:
-            subFolder = os.path.join(export_dir)
-            shutil.move(os.path.join(root, file), subFolder)
+            sub_folder = os.path.join(export_dir)
+            shutil.move(os.path.join(root, file), sub_folder)
 
 
-t = monotonic()
 while True:
-    if monotonic() - t > 1:
-        t = monotonic()
-        if os.listdir(import_dir):
-            work()
+    if os.listdir(import_dir):
+        work()
