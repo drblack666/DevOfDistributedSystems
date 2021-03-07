@@ -6,6 +6,17 @@ from pathlib import Path
 from time import monotonic
 
 
+def write_logs(operation_code, first_num, operations_count, operand):
+    operations_dict = {
+        0: "operation successfully done",
+        1: "not mine operation",
+        2: "file read"
+    }
+    with open(log_dir, 'a') as file:
+        file.write(str(datetime.now()) + " " + str(operations_count) + " " + str(first_num) + " "
+                   + operand + " " + operations_dict[operation_code] + "\n")
+
+
 def work():
     paths = sorted(Path(import_dir).iterdir(), key=os.path.getmtime)
     with open(paths[0], 'r') as file:
@@ -13,9 +24,9 @@ def work():
 
     num = lines[0].split('\n')[0]
     operand = lines[1].split(' ')[1].replace("\r", "").replace("\n", "")
+    second_operand = lines[2].split(' ')[1].replace("\r", "").replace("\n", "")
 
-    with open(log_dir, 'a') as file:
-        file.write(str(datetime.now()) + " " + str(len(lines)) + " " + num + " " + operand + "\n")
+    write_logs(2, num, len(lines), operand)
 
     if operand.startswith('^'):
         new_num = float(num) ** float(lines[1].split(' ')[0])
@@ -24,13 +35,12 @@ def work():
             for line in lines:
                 if line != lines[1]:
                     file.write(line)
-        with open(log_dir, 'a') as file:
-            file.write(str(datetime.now()) + " " + str(len(lines) - 1) + " " + str(new_num) + " "
-                       + lines[2].split(' ')[1].replace("\r", "").replace("\n", "") + " operation successfully done\n")
+        write_logs(0, new_num, len(lines) - 1, second_operand)
     else:
-        with open(log_dir, 'a') as file:
-            file.write(str(datetime.now()) + " " + str(len(lines)) + " " + num + " "
-                       + operand + " not mine operation\n")
+        with open(os.path.join(export_dir, "new.txt"), 'w') as file:
+            for line in lines:
+                file.write(line)
+        write_logs(1, num, len(lines), operand)
 
     file_list = glob.glob(os.path.join(import_dir, "*.*"))
     for f in file_list:
@@ -38,8 +48,8 @@ def work():
 
 
 if __name__ == "__main__":
-    import_dir = 'Z:/SRDS/DS-440/calc/group2/5'
-    export_dir = 'Z:/SRDS/DS-440/calc/group2/6s'
+    import_dir = 'Z:/SRDS/DS-440/calc/group 2/5'
+    export_dir = 'Z:/SRDS/DS-440/calc/group 2/6'
     log_dir = 'C:/Users/Shahovyuriia.Yu/Documents/log.txt'
 
     t = monotonic()
