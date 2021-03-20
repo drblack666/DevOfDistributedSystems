@@ -5,7 +5,7 @@ import sys
 
 def send():
     connection = pika.BlockingConnection(
-        pika.URLParameters('amqps://fkeozvxu:XUux19JAykFYZR7D2WmNuURddzKZwIag@hawk.rmq.cloudamqp.com/fkeozvxu'))
+        pika.URLParameters(''))
     channel = connection.channel()
 
     channel.queue_declare(queue='kashapov')
